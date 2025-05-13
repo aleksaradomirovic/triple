@@ -22,15 +22,6 @@
 
 enum env_type env = ENV_UNKNOWN;
 
-static enum env_type check_unknown(const char *str) {
-    if(str == NULL || strlen(str) == 0) {
-        if(sys == SYS_LINUX) {
-            return env = ENV_GNU;
-        }
-    }
-    return ENV_UNKNOWN;
-}
-
 static enum env_type check_glibc(const char *str) {
     if(strcmp(str, "glibc") == 0 || strcmp(str, "gnu") == 0) {
         return env = ENV_GNU;
@@ -41,21 +32,31 @@ static enum env_type check_glibc(const char *str) {
 enum env_type set_environment(const char *str) {
     env = ENV_UNKNOWN;
 
-    if(check_unknown(str)) {}
+    if(str == NULL) { return env; }
     else if(check_glibc(str)) {}
 
     return env;
 }
 
 const char * get_environment_str() {
+    if(env == ENV_UNKNOWN) {
+        if(sys == SYS_LINUX) {
+            env = ENV_GNU;
+        } else if(sys == SYS_NONE) {
+            env = ENV_ELF;
+        }
+    }
+
     switch(env) {
         case ENV_GNU:
             if(sys == SYS_LINUX) {
                 return "gnu";
             }
             error(ENOTSUP, 0, "environment 'gnu/glibc' not supported for system '%s'", get_system_str());
+        case ENV_ELF:
+            return "elf";
         default:
-            error(ENOTSUP, 0, "unknown/unsupported environment type");
     }
+    error(ENOTSUP, 0, "unknown/unsupported environment type");
     __builtin_unreachable();
 }

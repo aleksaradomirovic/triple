@@ -28,6 +28,20 @@ static void to_lower_str(char *str, size_t len) {
     }
 }
 
+#if defined(__x86_64__)
+#   define NATIVE_CPU "x86_64"
+#elif defined(__i686__)
+#   define NATIVE_CPU "i686"
+#elif defined(__i586__)
+#   define NATIVE_CPU "i586"
+#elif defined(__i486__)
+#   define NATIVE_CPU "i486"
+#elif defined(__i386__)
+#   define NATIVE_CPU "i386"
+#else
+#   define NATIVE_CPU ""
+#endif
+
 int init_native_defaults() {
     struct utsname sysinfo;
     if(uname(&sysinfo) != 0) {
@@ -35,9 +49,9 @@ int init_native_defaults() {
     }
 
     to_lower_str(sysinfo.sysname, sizeof(sysinfo.sysname));
-    to_lower_str(sysinfo.machine, sizeof(sysinfo.machine));
+    // to_lower_str(sysinfo.machine, sizeof(sysinfo.machine));
 
-    set_architecture(sysinfo.machine);
+    set_architecture(NATIVE_CPU);
     set_system(sysinfo.sysname);
     set_environment(NULL);
 

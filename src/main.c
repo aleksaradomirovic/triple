@@ -22,11 +22,19 @@
 #include "triple.h"
 
 static const struct argp_option argsoptions[] = {
+    { "cpu", 'm', "ARCH", 0, "Specify a cpu instruction set architecture", 0 },
+    { "system", 's', "SYSTEM", 0, "Specify a host system", 0 },
     { 0 }
 };
 
 static int argsparse(int key, char *arg, struct argp_state *state) {
     switch(key) {
+        case 'm':
+            set_architecture(arg);
+            break;
+        case 's':
+            set_system(arg);
+            break;
         default:
             return ARGP_ERR_UNKNOWN;
     }
@@ -40,11 +48,11 @@ static const struct argp argsinfo = {
 };
 
 int main(int argc, char **argv) {
+    init_native_defaults();
+
     if(argp_parse(&argsinfo, argc, argv, 0, NULL, NULL) != 0) {
         error(errno, errno, "failed to parse arguments");
     }
-
-    init_native_defaults();
 
     printf("%s-%s-%s\n", get_architecture_str(), get_system_str(), get_environment_str());
 

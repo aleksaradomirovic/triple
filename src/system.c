@@ -29,10 +29,18 @@ static enum sys_type check_linux(const char *str) {
     return SYS_UNKNOWN;
 }
 
+static enum sys_type check_none(const char *str) {
+    if(strcmp(str, "none") == 0 || strcmp(str, "freestanding") == 0) {
+        return sys = SYS_NONE;
+    }
+    return SYS_UNKNOWN;
+}
+
 enum sys_type set_system(const char *str) {
     sys = SYS_UNKNOWN;
 
     if(check_linux(str)) {}
+    else if(check_none(str)) {}
 
     return sys;
 }
@@ -41,8 +49,10 @@ const char * get_system_str() {
     switch(sys) {
         case SYS_LINUX:
             return "linux";
+        case SYS_NONE:
+            return "none";
         default:
-            error(ENOTSUP, 0, "unknown/unsupported system type");
     }
+    error(ENOTSUP, 0, "unknown/unsupported system type");
     __builtin_unreachable();
 }

@@ -21,6 +21,7 @@
 enum cpu_type {
     CPU_UNKNOWN = 0,
     CPU_X86_64,
+    CPU_I386,
 };
 
 extern enum cpu_type cpu;
@@ -30,6 +31,7 @@ const char * get_architecture_str();
 
 enum sys_type {
     SYS_UNKNOWN = 0,
+    SYS_NONE,
     SYS_LINUX,
 };
 
@@ -40,6 +42,7 @@ const char * get_system_str();
 
 enum env_type {
     ENV_UNKNOWN = 0,
+    ENV_ELF,
     ENV_GNU,
 };
 
