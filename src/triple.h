@@ -16,6 +16,12 @@
 
 #pragma once
 
+#include <stdbool.h>
+
+extern bool verbose;
+extern bool unconcise;
+extern bool printinfo;
+
 // cpu, system, environment
 
 enum cpu_type {
@@ -28,6 +34,7 @@ extern enum cpu_type cpu;
 
 enum cpu_type set_architecture(const char *str);
 const char * get_architecture_str();
+bool append_architecture_str(char *triplestr);
 
 enum sys_type {
     SYS_UNKNOWN = 0,
@@ -39,6 +46,7 @@ extern enum sys_type sys;
 
 enum sys_type set_system(const char *str);
 const char * get_system_str();
+bool append_system_str(char *triplestr);
 
 enum env_type {
     ENV_UNKNOWN = 0,
@@ -50,5 +58,8 @@ extern enum env_type env;
 
 enum env_type set_environment(const char *str);
 const char * get_environment_str();
+bool append_environment_str(char *triplestr);
 
 int init_native_defaults();
+
+void printv(const char *fmt, ...);

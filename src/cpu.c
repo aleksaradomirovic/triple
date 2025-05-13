@@ -89,3 +89,8 @@ const char * get_architecture_str() {
     error(ENOTSUP, 0, "unknown/unsupported cpu type");
     __builtin_unreachable();
 }
+
+bool append_architecture_str(char *triplestr) {
+    strcat(triplestr, get_architecture_str());
+    return true;
+}

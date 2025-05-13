@@ -32,21 +32,18 @@ static enum env_type check_glibc(const char *str) {
 enum env_type set_environment(const char *str) {
     env = ENV_UNKNOWN;
 
-    if(str == NULL) { return env; }
-    else if(check_glibc(str)) {}
-
-    return env;
-}
-
-const char * get_environment_str() {
-    if(env == ENV_UNKNOWN) {
+    if(str == NULL) {
         if(sys == SYS_LINUX) {
             env = ENV_GNU;
         } else if(sys == SYS_NONE) {
             env = ENV_ELF;
         }
-    }
+    } else if(check_glibc(str)) {}
 
+    return env;
+}
+
+const char * get_environment_str() {
     switch(env) {
         case ENV_GNU:
             if(sys == SYS_LINUX) {
@@ -59,4 +56,9 @@ const char * get_environment_str() {
     }
     error(ENOTSUP, 0, "unknown/unsupported environment type");
     __builtin_unreachable();
+}
+
+bool append_environment_str(char *triplestr) {
+    strcat(triplestr, get_environment_str());
+    return true;
 }

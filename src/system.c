@@ -56,3 +56,12 @@ const char * get_system_str() {
     error(ENOTSUP, 0, "unknown/unsupported system type");
     __builtin_unreachable();
 }
+
+bool append_system_str(char *triplestr) {
+    if(sys == SYS_NONE && !unconcise) {
+        return false;
+    }
+
+    strcat(triplestr, get_system_str());
+    return true;
+}

@@ -51,9 +51,32 @@ int init_native_defaults() {
     to_lower_str(sysinfo.sysname, sizeof(sysinfo.sysname));
     // to_lower_str(sysinfo.machine, sizeof(sysinfo.machine));
 
-    set_architecture(NATIVE_CPU);
-    set_system(sysinfo.sysname);
-    set_environment(NULL);
+    if(cpu == CPU_UNKNOWN) {
+        set_architecture(NATIVE_CPU);
+        if(cpu != CPU_UNKNOWN) {
+            printv("deduced native cpu instruction set architecture as %s\n", get_architecture_str());
+        } else {
+            printv("failed to deduce native cpu instruction set architecture\n");
+        }
+    }
+
+    if(sys == SYS_UNKNOWN) {
+        set_system(sysinfo.sysname);
+        if(sys != SYS_UNKNOWN) {
+            printv("deduced native system as %s\n", get_system_str());
+        } else {
+            printv("failed to deduce native system\n");
+        }
+    }
+
+    if(env == ENV_UNKNOWN) {
+        set_environment(NULL);
+        if(env != ENV_UNKNOWN) {
+            printv("deduced native environment as %s\n", get_environment_str());
+        } else {
+            printv("failed to deduce native environment\n");
+        }
+    }
 
     return 0;
 }
