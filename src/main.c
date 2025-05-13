@@ -39,13 +39,25 @@ static const struct argp_option argsoptions[] = {
     { 0 }
 };
 
+static void to_lower_str(char *str, size_t len) {
+    for(size_t i = 0; i < len; i++) {
+        str[i] = tolower(str[i]);
+    }
+}
+
 static int argsparse(int key, char *arg, struct argp_state *state) {
     switch(key) {
         case 'm':
-            set_architecture(arg);
+            to_lower_str(arg, strlen(arg));
+            if(!set_architecture(arg)) {
+                argp_failure(state, EINVAL, 0, "unknown/unsupported cpu type");
+            }
             break;
         case 's':
-            set_system(arg);
+            to_lower_str(arg, strlen(arg));
+            if(!set_system(arg)) {
+                argp_failure(state, EINVAL, 0, "unknown/unsupported system type");
+            }
             break;
 
         case 'v':
